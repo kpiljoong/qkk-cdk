@@ -29,9 +29,15 @@ export class QkkS3Bucket extends QkkConstruct {
   constructor(scope: Construct, id: string, def: QkkS3BucketDef) {
     super(scope, id, def);
 
+    const bucketName = def.bucketName ?? undefined;
+
+    if (bucketName && (def.bucketName != bucketName.toLowerCase())) {
+      throw new Error('Error: bucket name must start and end wit a lowercase character or number');
+    }
+
     // S3 Bucket
     this.bucket = new Bucket(this, 'S3Bucket', {
-      bucketName: def.bucketName ?? undefined,
+      bucketName,
       websiteIndexDocument: def.websiteIndexDocument,
       removalPolicy: def.removalPolicy ?? RemovalPolicy.RETAIN,
       autoDeleteObjects: def.removalPolicy == RemovalPolicy.DESTROY ? true : false,

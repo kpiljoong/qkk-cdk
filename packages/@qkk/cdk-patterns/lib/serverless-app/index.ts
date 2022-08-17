@@ -1,5 +1,5 @@
-import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
+import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 
 import { 
   QkkDynamoTableDef, 
@@ -11,7 +11,7 @@ import {
 } from '@qkk/cdk-core';
 
 export interface QkkServerlessAppDef extends QkkConstructDef {
-  name: string;
+  appName: string;
   lambdaDef: QkkLambdaDef;
   tableDef: QkkDynamoTableDef;
 }
@@ -23,13 +23,11 @@ export class QkkServerlessApp extends QkkConstruct {
   constructor(scope: Construct, id: string, def: QkkServerlessAppDef) {
     super(scope, id, def);
 
-    const name = def.name;
-
     // App function
-    const fn = new QkkLambda(this, name, def.lambdaDef);
+    const fn = new QkkLambda(this, def.appName, def.lambdaDef);
 
     // App API
-    const api = new LambdaRestApi(this, `${name}Api`, {
+    const api = new LambdaRestApi(this, `${def.appName}Api`, {
       handler: fn.lambda,
       proxy: false
     });
@@ -37,6 +35,6 @@ export class QkkServerlessApp extends QkkConstruct {
     api.root.addResource('api').addMethod('GET');
 
     // App database
-    const table = new QkkDynamoTable(this, `${name}Table`, def.tableDef);
+    const table = new QkkDynamoTable(this, `${def.appName}Table`, def.tableDef);
   }
 }

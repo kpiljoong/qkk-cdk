@@ -1,6 +1,6 @@
 {
   "name": "@qkk/cdk-patterns",
-  "version": "0.0.2",
+  "version": "0.0.8",
   "description": "Qkk's CDK patterns",
   "author": {
     "name": "kpiljoong",
@@ -31,7 +31,7 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@qkk/cdk-core": "^0.0.5",
+    "@qkk/cdk-core": "^0.0.10",
     "aws-cdk-lib": "2.37.1",
     "constructs": "10.1.78",
     "source-map-support": "^0.5.21"

@@ -5,8 +5,11 @@ import { QkkConstruct, QkkConstructDef } from './base';
 
 export interface QkkLambdaLayerDef extends QkkConstructDef {
     layerName: string,
+    
     codePath: string,
-    compatibleRuntimes: Runtime[]
+
+    // Default runtime: NODEJS_16_X
+    compatibleRuntimes?: Runtime[]
 }
 
 export class QkkLambdaLayer extends QkkConstruct {
@@ -14,10 +17,12 @@ export class QkkLambdaLayer extends QkkConstruct {
     
     constructor(scope: Construct, id: string, def: QkkLambdaLayerDef) {
         super(scope, def.layerName + id, def);
+
+        let compatibleRuntimes = def.compatibleRuntimes ?? [Runtime.NODEJS_16_X];
         
         this.layer = new LayerVersion(this, id, {
             code: Code.fromAsset(def.codePath),
-            compatibleRuntimes: def.compatibleRuntimes
+            compatibleRuntimes
         });
     }
 }

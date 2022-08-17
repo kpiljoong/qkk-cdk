@@ -4,14 +4,23 @@ import { PolicyDocument, PolicyStatement, PolicyStatementProps, Role, ServicePri
 import { Code, Function, Runtime, Tracing } from "aws-cdk-lib/aws-lambda";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { QkkConstruct, QkkConstructDef } from "./base";
+import _ = require("lodash");
 
 export interface QkkLambdaDef extends QkkConstructDef {
   functionName: string;
+  
   codePath: string;
+
   handler: string;
+
   policies?: PolicyStatementProps[];
+
+  // Default runtime: NODEJS_16_X.
   runtime?: Runtime;
+
+  // Default memory size: 128
   memorySize?: number;
+
   vpc?: Vpc;
 }
 
@@ -44,12 +53,12 @@ function createRole(scope: Construct,
   policies: PolicyStatementProps[]): Role {
   const policy = new PolicyDocument();
 
-  if (policies && policies.length > 0) {
+  if (!_.isEmpty(policies)) {
     policies.forEach((p) => {
       if (p.actions && p.resources) {
-        policy.addStatements(getPolicyStatement(p.actions, p.resources));
+        policy.addStatements(createPolicyStatement(p.actions, p.resources));
       }
-    })
+    });
   }
 
   const logActions: string[] = [
@@ -60,7 +69,7 @@ function createRole(scope: Construct,
     'arn:aws:logs:*:*:*'
   ];
 
-  policy.addStatements(getPolicyStatement(logActions, logResources));
+  policy.addStatements(createPolicyStatement(logActions, logResources));
 
   return new Role(scope, roleName, {
     roleName,
@@ -69,10 +78,10 @@ function createRole(scope: Construct,
   });
 }
 
-function getPolicyStatement(actions: string[],
+function createPolicyStatement(actions: string[],
       resources: string[]) : PolicyStatement {
-  const statement = new PolicyStatement();
-  statement.addActions(...actions);
-  statement.addResources(...resources);
-  return statement
+  const stmt = new PolicyStatement();
+  stmt.addActions(...actions);
+  stmt.addResources(...resources);
+  return stmt;
 }

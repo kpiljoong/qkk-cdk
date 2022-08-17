@@ -1,7 +1,48 @@
-import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
+import { App, AppProps, CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 
 import * as _ from 'lodash';
+import { Environment, Stage } from "../config";
+import { ensureEnvValues } from "../util";
+
+/**
+ * QkkApp's definition.
+ */
+export interface QkkAppDef extends AppProps {
+  stages: Stage[];
+  appPrefix: string;
+}
+
+/**
+ * Qkk's base app.
+ * 
+ * It ensures all the stacks deploy on each environment.
+ */
+export class QkkApp extends App {
+  stages: Stage[];
+  appPrefix: string;
+
+  constructor(def: QkkAppDef) {
+    super(def);
+
+    this.stages = def.stages;
+    this.appPrefix = def.appPrefix
+  }
+
+  public run(code: (envName: string, env: Environment) => any) {
+    for (let stage of this.stages) {
+      const stageName = stage.name;
+      const envName = `${this.appPrefix}-${stageName}`;
+      const environments = stage.environment;
+    
+      for (let env of environments) {
+        let newEnv = ensureEnvValues(env);
+        
+        code(envName, newEnv);
+      }
+    }
+  }
+}
 
 /**
  * QkkStack's definition.
@@ -13,12 +54,12 @@ import * as _ from 'lodash';
   /**
    * A name of the construct. It differs from stackName.
    */
-  readonly name: string;
+  readonly name?: string;
 
   /**
    * A stage for the stack.
    */
-  readonly stage: string;
+  readonly stage?: string;
 }
 
 /**

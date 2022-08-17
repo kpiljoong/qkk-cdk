@@ -1,3 +1,4 @@
+import { Construct } from 'constructs';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { OriginAccessIdentity } from 'aws-cdk-lib/aws-cloudfront';
 import { CanonicalUserPrincipal } from 'aws-cdk-lib/aws-iam';
@@ -11,28 +12,30 @@ import {
 
 import * as EkkUtil from '@qkk/cdk-core';
 
-export interface QkkStaticsiteDef extends QkkConstructDef {
+/**
+ * The definition for QkkStaticSite
+ */
+export interface QkkStaticSiteDef extends QkkConstructDef {
   name: string;
   bucketName: string;
   bucketRemovalPolicy?: RemovalPolicy;
   siteRootPath: string;
 }
 
+/**
+ * The pattern for static site.
+ */
 export class QkkStaticSite extends QkkConstruct {
-  def: QkkStaticsiteDef;
+  def: QkkStaticSiteDef;
 
-  constructor(scope: QkkConstruct, id: string, def: QkkStaticsiteDef) {
+  constructor(scope: Construct, id: string, def: QkkStaticSiteDef) {
     super(scope, id, def);
 
-    this.initResources();
-  }
-
-  protected initResources() {
-    const name = this.def.name;
+    const name = def.name;
     const bucket = new QkkS3Bucket(this, `${name}Bucket`, {
       name: name,
-      bucketName: this.def.bucketName,
-      removalPolicy: this.def.bucketRemovalPolicy
+      bucketName: def.bucketName,
+      removalPolicy: def.bucketRemovalPolicy
     });
 
     const oai = new OriginAccessIdentity(this, `${name}CloudFrontOai`);
@@ -44,7 +47,7 @@ export class QkkStaticSite extends QkkConstruct {
     const webDist = new QkkCloudFrontWebDist(this, 'EkkCloudFrontWebDist', {
       siteBucket: bucket.bucket,
       oai: oai,
-      siteRootPath: this.def.siteRootPath
+      siteRootPath: def.siteRootPath
     });
 
     EkkUtil.output(

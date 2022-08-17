@@ -535,10 +535,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@qkk/cdk-core@^0.0.5":
-  "integrity" "sha512-LclvPhow7fBWduOYyEyBDQMk6Va8GFSGwnkhFXZqaTZwcoLcBiNVnYcd3Txn8YQ408RMVCvHx1n/jntpzghyOA=="
-  "resolved" "https://registry.npmjs.org/@qkk/cdk-core/-/cdk-core-0.0.5.tgz"
-  "version" "0.0.5"
+"@qkk/cdk-core@^0.0.10":
+  "integrity" "sha512-+Rl3cE4t4SAMVxEGorsqy5p2Ku/Z20FFlhRRYVHhtzuOIvt+MMRRZRvZapbwL8vby+4/MUNxfybK0/TMgzpaUg=="
+  "resolved" "https://registry.npmjs.org/@qkk/cdk-core/-/cdk-core-0.0.10.tgz"
+  "version" "0.0.10"
   dependencies:
     "aws-cdk-lib" "2.37.1"
     "constructs" "10.1.78"

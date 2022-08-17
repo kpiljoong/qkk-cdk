@@ -1,6 +1,6 @@
 {
   "name": "@qkk/cdk-core",
-  "version": "0.0.5",
+  "version": "0.0.10",
   "description": "Qkk's CDK core components",
   "author": {
     "name": "kpiljoong",

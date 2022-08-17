@@ -1,9 +1,9 @@
 import { Construct } from 'constructs';
-import { DatabaseCluster, Credentials, IClusterEngine } from 'aws-cdk-lib/aws-rds';
-import { SubnetType, IVpc } from 'aws-cdk-lib/aws-ec2';
-import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { QkkConstruct, QkkConstructDef } from './base';
 
+/**
+ * The definition for QkkApiGateway.
+ */
 export interface QkkApiGatewayDef extends QkkConstructDef {
 }
 
