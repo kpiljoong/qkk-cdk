@@ -1,9 +1,22 @@
-node_modules
-
-cdk.out
+.vscode
+.idea
+.DB_Store
 
 dist
+node_modules
+yarn.lock
 
 cdk.context.json
+cdk.out
+.cdk.staging
 
 tsconfig.json
+
+*-debug.log
+*-error.log
+pids
+*.pid
+
+# Cloud9
+.c9
+.nzm-*
